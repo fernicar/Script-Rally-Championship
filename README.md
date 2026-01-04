@@ -1,6 +1,6 @@
 # Script Rally Championship
 
-![app_capture0](blob/1ccd1ad67caca6fbe82d041c3ec0b029b0384751/images/app_capture0.png)
+![app_capture0](https://github.com/fernicar/Script-Rally-Championship/blob/1ccd1ad67caca6fbe82d041c3ec0b029b0384751/images/app_capture0.png?raw=true)
 
 [![Watch the video](https://img.youtube.com/vi/_q0gtn43hcY/0.jpg)](https://www.youtube.com/watch?v=_q0gtn43hcY)
 
