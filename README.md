@@ -9,261 +9,143 @@ https://youtu.be/_q0gtn43hcY
 
 ## Description
 
-Script Rally Championship is a classic arcade-style rally racing game that simulates high-speed off-road driving across varied terrains. Players control real-world rally cars, navigating challenging tracks with different surface types that affect vehicle handling and friction. The game emphasizes skillful powersliding, precise control, and time management to overtake opponents and qualify within strict time limits. As a milestone in racing games, it features realistic physics for its era, immersive sound design with authentic engine noises and upbeat rock music, and vibrant 3D graphics depicting dynamic environments. This TINS README describes a faithful recreation of the original 1995 arcade experience, adapted for modern platforms while preserving the core thrill of rally racing without damage modeling or complex simulations.
+Script Rally Championship is a classic arcade-style rally racing game that simulates high-speed off-road driving across varied terrains. Inspired by 90s arcade racers like *Sega Rally*, it utilizes a hybrid physics engine to blend arcade accessibility with nuanced handling dynamics. The game is built entirely with web technologies, featuring procedural track generation, synthesized audio, and a unique "Virtulocity" physics system.
 
 ## Functionality
 
-### Core Features
+### Game Modes
 
-- Championship mode where players race through a sequence of tracks, overtaking AI-controlled opponents to achieve first place and unlock a bonus stage.
-- Time Attack mode for practicing individual tracks with ghost car replays and lap timing.
-- Two-player split-screen multiplayer for competitive racing on selected tracks.
-- Three selectable cars with distinct handling characteristics, including an unlockable hidden vehicle.
-- Four tracks with unique terrains, layouts, and difficulty levels, each simulating point-to-point rally stages.
-- Support for manual and automatic transmission, with manual offering faster performance through precise gear shifting.
-- Realistic surface-based physics: asphalt for high grip, gravel for moderate sliding, mud for low traction, affecting acceleration, braking, and cornering.
-- Overtaking mechanics where player must pass non-aggressive AI cars that follow optimal racing lines.
-- Checkpoint system with time extensions; failure to reach checkpoints or finish within time limits results in game over.
-- Replay system to view completed races from multiple camera angles.
-- Customization options for car tuning, including handling, tires, suspension, and engine sound variations (e.g., blow-off valve noise).
+1.  **Arcade Championship**
+    - A 4-stage progression system (Desert -> Forest -> Mountain -> Lakeside).
+    - The player races against 19 AI opponents (simulated rank positions).
+    - **Checkpoint System:** Players must reach checkpoints to extend the countdown timer. Running out of time results in Game Over.
+    - **Progression Logic:** 
+        - Stages 1-3 require finishing the race to advance.
+        - Stage 4 (Lakeside) is a "Bonus Stage" where the player must finish 1st to win the championship.
 
-### User Interface
+2.  **Time Attack**
+    - Solo racing on a selected track.
+    - 2 Laps per session.
+    - Focus on setting the fastest lap time without AI interference.
 
-The game interface should be clean and arcade-inspired, with menus and HUD elements that provide essential information without cluttering the screen.
+### Controls
 
-Main Menu Layout (ASCII representation):
+- **Keyboard:**
+  - `W` / `Arrow Up`: Accelerate
+  - `S` / `Arrow Down`: Brake / Reverse
+  - `A` / `Arrow Left`: Steer Left
+  - `D` / `Arrow Right`: Steer Right
+  - `Space` / `X`: Handbrake (Drift initiation)
+  - `Esc` / `P`: Pause Game
+  - `` ` `` / `~`: Toggle Debug Mode
 
-```
-+-------------------------------+
-|   Script RALLY CHAMPIONSHIP   |
-+-------------------------------+
-| > Championship                |
-|   Time Attack                 |
-|   Two Player                  |
-|   Options                     |
-|   Credits                     |
-+-------------------------------+
-| [Insert Coin / Start Button]  |
-+-------------------------------+
-```
+- **Mouse (Lab Mode):**
+  - When the "Physics Lab" (Tail Override) is active, an on-screen pad allows mouse-based analog steering and throttle control.
 
-- Championship: Starts the main mode with track progression.
-- Time Attack: Select track and car for solo practice.
-- Two Player: Split-screen mode with track and car selection.
-- Options: Adjust sound volume, difficulty, transmission type, and controls.
-- Credits: Display development team and licenses.
+### Car Classes
 
-In-Game HUD (during race):
+The game features three distinct car archetypes with unique physics properties:
 
-```
-+---------------------------------------------+
-| Position: 1/20     Time: 02:45.67           |
-| Speed: 180 km/h    Gear: 4                  |
-| [Speedometer Gauge]  [Mini-Map / Progress]  |
-+---------------------------------------------+
-| [On-screen arrows for upcoming turns]       |
-+---------------------------------------------+
-```
+1.  **Rally (Delta Integer):** Balanced acceleration, grip, and top speed. Red livery.
+2.  **Touring (Supar GT):** High top speed, lower acceleration, tighter grip. Blue livery.
+3.  **Cyber (Kaneda Bike):** Extreme acceleration, loose grip (drift-heavy), electric engine sound. Green livery.
 
-- Position: Current ranking among opponents.
-- Time: Remaining time to checkpoint or finish.
-- Speed: Analog or digital speed display.
-- Gear: Current gear for manual transmission.
-- Mini-Map: Linear progress bar showing track advancement, checkpoints, and opponent positions.
-- On-screen directions: Arrows indicating left/right turns with severity (e.g., easy left, sharp right) to guide the player.
+## User Interface
 
-Post-Race Screen:
-- Display finishing position, total time, best lap (if applicable), and qualification status.
-- If failed: Show "Game Over Yeah!" animation with voice line.
-- Unlock prompts for hidden car or bonus track.
+### Heads-Up Display (HUD)
+- **Top Left:** Current Rank/Position (Arcade) or Lap Count (Time Attack), plus the Time Limit.
+- **Top Center:** Stage Progress bar indicating distance to next checkpoint.
+- **Top Right:** Mini-map (SVG-based) showing track layout, player position, and opponent dots.
+- **Bottom Right:** Digital Speedometer (km/h), Vector Speed, and Gear indicator.
+- **Overlays:** 
+    - "CHECK POINT" splash text when time is extended.
+    - "STAGE CLEAR" / "GAME OVER" announcements.
+    - Turn Navigator: Arrows indicating upcoming turn direction and severity (Easy/Medium/Hard).
 
-### Behavior Specifications
-
-1. Race Start:
-   - Countdown sequence: "3, 2, 1, GO!" with voice announcement and engine revving sounds.
-   - Player starts at the back of the pack in Championship mode; must overtake to advance positions.
-
-2. Driving and Handling:
-   - Acceleration: Responsive throttle with surface-dependent traction; mud causes wheelspin and slower buildup.
-   - Braking: Strong deceleration on asphalt, sliding on gravel/mud.
-   - Steering: Precise control with powersliding on corners – hold brake while turning to initiate drift, then accelerate out for speed boost.
-   - Collisions: No damage; bouncing off walls or cars reduces speed but allows quick recovery.
-   - Jumps and Bumps: Tracks include elevation changes; landing impacts handling briefly.
-
-3. Overtaking and AI:
-   - AI cars follow fixed paths at consistent speeds; player can pass by finding better lines or using drifts.
-   - Positions update in real-time; overtaking triggers position HUD update and sound cue.
-
-4. Checkpoints and Timing:
-   - Each track has multiple checkpoints; reaching one adds time (e.g., +30 seconds).
-   - Failure to reach checkpoint in time: Immediate game over with "Game Over Yeah!" voice.
-   - Championship progression: Finishing position carries to next track; must be 1st after third track to unlock Lakeside.
-
-5. Multiplayer:
-   - Split-screen view with individual HUDs.
-   - Competitive: Race head-to-head; winner based on finish time.
-   - Cooperative: Optional mode where players share positions against AI.
-
-6. Unlocks:
-   - Finish Lakeside in first place to unlock Lancia Stratos HF permanently.
-   - Easter egg: Specific input sequence in menus to unlock hidden car early.
-
-7. Edge Cases:
-   - Off-track: Invisible walls prevent leaving the road; bouncing back with speed penalty.
-   - Input Lag: Ensure controls respond within 16ms for smooth feel.
-   - Difficulty Levels: Easy (more time, slower AI), Normal, Hard (less time, faster AI).
+### Menus
+- **Main Menu:** 3D scene background. Options for Car Select, Game Mode, Difficulty (Easy/Normal/Hard), Options, and Credits.
+- **Pause Menu:** Allows resuming, restarting the stage, or quitting to title. Volume control included.
+- **Debug/Lab UI:** 
+    - **Camera Settings:** Adjust distance, pitch, height, and follow mode (Fixed vs. Vector-compensated).
+    - **Track Settings:** Toggle wall collisions and adjust track width dynamically.
+    - **Virtulocity Mapper:** A graph UI to tune the physics blend curves real-time.
 
 ## Technical Implementation
 
 ### Architecture
+- **Framework:** React with Vite.
+- **3D Engine:** `@react-three/fiber` (Three.js).
+- **State Management:** `zustand`. The store holds game logic, score, flags, and configuration.
+- **Loop:** Physics logic runs inside a `useFrame` loop (separate from React render cycle) to ensure smooth 60FPS gameplay.
 
-The game should use a modular architecture with a main game loop handling input, physics updates, rendering, and audio. Separate modules for:
-- Input handling (keyboard, gamepad, or steering wheel simulation).
-- Physics engine for vehicle simulation.
-- AI pathfinding for opponent cars.
-- Rendering system for 3D environments and effects.
-- Audio manager for layered sounds and music.
-- State machine for managing menus, races, replays, and transitions.
+### Procedural Track Generation
+Tracks are generated mathematically using `THREE.CatmullRomCurve3`.
+1.  **Waypoints:** Pre-defined Vector3 arrays define the coarse shape of 4 biomes (Desert, Forest, Mountain, Lakeside).
+2.  **Geometry:**
+    - **Road:** Generated by extruding a shape along the curve.
+    - **Skirt/Terrain:** An instanced mesh grid or extruded shape bordering the road, seamlessly blending into a floor plane.
+    - **Scenery:** Instanced meshes (Trees, Rocks) scattered along the curve tangents based on biome density settings.
+3.  **Textures:** Textures (Asphalt, Gravel, Mud) are generated procedurally via HTML5 Canvas API to keep asset size zero.
 
-### Data Structures
+### Physics Engine ("Virtulocity")
 
-Car Object:
+The physics engine uses a hybrid approach defined by a `VirtulocityConfig`. It blends two models based on the car's speed:
 
-```javascript
-{
-  id: string,                // e.g., "celica", "delta", "stratos"
-  name: string,              // Full car name
-  driveType: "4WD" | "2WD",  // Affects handling
-  acceleration: number,      // 0-1 scale for throttle response
-  topSpeed: number,          // Max km/h
-  grip: number,              // Base traction multiplier
-  weight: number,            // Influences inertia and sliding
-  tuning: {
-    tires: "soft" | "medium" | "hard",  // Affects surface grip
-    suspension: number,                 // Bounce dampening
-    blowOffValve: boolean               // Extra sound effect
-  }
+1.  **Kinematic (Arcade):** Direct mapping of input to rotation. "Front Newtonian" blend factor. High grip, responsive.
+2.  **Newtonian (Simulation):** Force-based movement (Thrust vectors, Inertia). "Rear Newtonian" blend factor. Slidey, drift-heavy.
+
+**Simulation Step:**
+1.  **Inputs:** Throttle/Brake apply force vectors. Steering applies torque.
+2.  **Drift Logic:** Braking while turning cuts front grip and reduces rear grip, forcing a slide.
+3.  **Surface Interaction:** 
+    - **Asphalt:** High grip, low drag.
+    - **Offroad:** Low grip, high drag, camera rumble.
+4.  **Collision:** 
+    - **Walls:** Elastic collisions reflecting velocity vectors based on track tangents.
+    - **Opponents:** Simple sphere-based repulsion.
+
+### Audio System
+Audio is entirely synthesized using the Web Audio API (no external assets).
+- **Engine:** Oscillator node (Sawtooth/Square) where frequency modulates with car speed. Low-pass filter opens up as RPM increases.
+- **Skid/Rumble:** White noise buffer passed through High-pass (skid) or Low-pass (rumble) filters, volume modulated by slip angle and surface type.
+- **Speech:** Uses the browser's `SpeechSynthesis` API for the announcer.
+
+### Visual Effects
+- **Shadows:** A custom "Blob Shadow" (plane with gradient texture) under the car for performance, plus a Directional Light that strictly follows the car's position to optimize shadow map resolution.
+- **Particles:** Instanced Mesh system for dust trails. Emits from rear wheels based on surface type and speed. Cyclic buffer management for performance.
+- **Skidmarks:** Instanced mesh planes spawned at wheel positions when slip angle > threshold.
+
+## Data Structures
+
+### Physics State
+```typescript
+interface PhysicsState {
+  speed: number;          // Scalar forward speed
+  angle: number;          // Heading angle (radians)
+  position: THREE.Vector3;// World position
+  velocity: THREE.Vector3;// Physics vector
+  angularVelocity: number;// Rotation speed
+  steeringValue: number;  // Current wheel angle (smoothed)
 }
 ```
 
-Track Object:
-
-```javascript
-{
-  id: string,                // e.g., "desert"
-  name: string,
-  difficulty: "easy" | "medium" | "hard" | "bonus",
-  length: number,            // Meters
-  surfaces: array,           // Segments: [{type: "asphalt" | "gravel" | "mud", friction: number, start: number, end: number}]
-  checkpoints: array,        // Positions: [distance1, distance2, ...]
-  turns: array,              // [{position: number, direction: "left" | "right", severity: "easy" | "medium" | "sharp"}]
-  elevation: array,          // Height map for jumps/bumps
-  environment: {
-    weather: "clear" | "dusty",
-    timeOfDay: "day"
-  }
+### Track Configuration
+```typescript
+interface TrackConfig {
+    trackType: 'DEBUG' | 'DESERT' | 'FOREST' | 'MOUNTAIN' | 'LAKESIDE';
+    width: number;
+    wallCollisions: boolean;
 }
 ```
 
-Opponent AI:
+## Performance Considerations
+- **Instancing:** Scenery, particles, and skidmarks must use `InstancedMesh` to keep draw calls low.
+- **Texture Generation:** Textures are created once on startup/level-load via Canvas 2D.
+- **State Optimization:** High-frequency data (physics positions) are stored in mutable refs or outside the React render tree to prevent Garbage Collection spikes.
+- **FPS Monitor:** A built-in monitor detects frame drops below 30FPS and triggers a "Low FPS" mode that disables expensive effects (like real-time shadows).
 
-```javascript
-{
-  car: CarObject,            // Assigned car
-  path: array,               // Predefined racing line points
-  speedMultiplier: number,   // 0.8-1.2 based on difficulty
-  position: number           // Current track distance
-}
-```
-
-### Algorithms
-
-1. Physics Simulation:
-   - Update vehicle position every frame using velocity vectors.
-   - Apply friction based on current surface: velocity *= friction * deltaTime.
-   - Drifting: If brake + turn, reduce forward grip, increase lateral slide; exit drift with acceleration boost if angle < 45 degrees.
-   - Collision Detection: Raycasting for walls/cars; resolve with elastic bounce (speed *= 0.8).
-
-2. AI Behavior:
-   - Follow spline-based racing line with minor deviations.
-   - Adjust speed at turns: decelerate before corner, accelerate out.
-   - No collision response with player; phase through if needed.
-
-3. Rendering:
-   - 3D camera follows car with dynamic angles (chase, hood, bumper).
-   - Particle effects for dust/mud on respective surfaces.
-   - Draw distance optimization: Load track segments progressively.
-
-4. Audio Mixing:
-   - Layer engine sound pitch based on RPM.
-   - Trigger skid sounds when slide angle > 10 degrees.
-   - Play music tracks looped during races.
-
-## Style Guide
-
-### Visual Design
-
-- Retro-inspired 3D graphics with vibrant colors: Desert (yellow sands, blue skies), Forest (green foliage, brown paths), Mountain (gray rocks, misty), Lakeside (blue water, white clouds).
-- Car models: Detailed polygons with textures for sponsors/logos.
-- Effects: Dust trails on gravel, mud splatters, tire smoke during drifts.
-- UI: Bold fonts, red/yellow accents for HUD; animated transitions for menus.
-
-### Interactions
-
-- Smooth animations for car movements, jumps, and collisions.
-- Vibration feedback on supported controllers for surfaces and impacts.
-- Responsive controls: Analog steering/throttle for precision.
-
-### Responsive Behavior
-
-- Adapt to different resolutions: Scale HUD elements.
-- Platform adaptations: Touch controls for mobile, keyboard/gamepad for desktop.
-
-## Performance Requirements
-
-- Maintain 60 FPS during races with up to 20 opponent cars.
-- Load tracks under 2 seconds.
-- Efficient memory use: Stream textures and models.
-- Optimize for mid-range hardware: Reduce particle effects on low-end.
-
-## Accessibility Requirements
-
-- Color-blind modes for HUD elements.
-- Customizable controls and difficulty.
-- Audio cues for visual indicators (e.g., voice for turn arrows).
-- Subtitle options for voice lines.
-
-## Testing Scenarios
-
-- Complete Championship mode without game over; verify position carry-over.
-- Achieve powerslide boost; measure speed increase.
-- Overtake all AI in one track; check ranking update.
-- Fail checkpoint; trigger "Game Over Yeah!" sequence.
-- Unlock hidden car; confirm availability in menus.
-- Multiplayer race; ensure split-screen sync and no lag.
-
-## Security Considerations
-
-- No online features in base game; if added, validate inputs to prevent cheats.
-- Secure save files for unlocks and high scores.
-
-## Extended Features (Optional)
-
-- Network multiplayer for up to 4 players.
-- Custom track editor.
-- Additional cars from rally history.
-- Weather variations (rain affecting grip).
-- VR support for immersive driving.
-- High-score online leaderboards.
-
-## Implementation Notes
-
-- Focus on authentic rally feel: Prioritize handling realism over visual fidelity if trade-offs needed.
-- Use real car specs for base stats, adjusted for balance.
-- Include iconic voice lines like "Game Over Yeah!" and countdown.
-- Music: Upbeat rock tracks similar to originals (e.g., "My Dear Friend, Rally").
-- Ensure all surfaces distinctly affect audio (e.g., gravel crunch, mud slosh).
-- Optimize for fun: Make powersliding rewarding but forgiving for beginners.
+ 
+[complete the TINS here]
 
 ---
 
